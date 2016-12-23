@@ -1,31 +1,37 @@
 <!-- Monster HTML file containing the whole app. That's right everything. -->
 <html>
   <body>
-    <% unless @jobs_data.nil? %>
+    <% unless @has_filter %>
       <div>
         <%= button_tag "Edit Job Filters", class: "btn btn-large btn-success" %>
       </div>
     <% end %>
 
-    <div id="search-form" class="col-md-4" >
+    <div id="search-form">
       <%= form_for @jobs_filter, :url => jobs_search_path(@jobs_filter), :method => :get do |f| %>
-        <%= f.label :company %>:
-        <%= f.text_field :company, class: "form-control" %><br />
+        <div class="col-md-12">
+          <div class="col-md-4">
+            <%= f.label :company %>:
+            <%= f.text_field :company, class: "form-control" %><br />
 
-        <%= f.label :category %>:
-        <%= f.text_field :category, class: "form-control" %><br />
+            <%= f.label :categories %>:
+            <%= f.select :categories, options_for_select(@categories), {}, {multiple: true, class: "form-control"} %><br />
+          </div>
+          <div class="col-md-4">
+            <%= f.label :level %>:
+            <%= f.select :levels, options_for_select(@levels), {}, {multiple: true, class: "form-control"} %><br />
 
-        <%= f.label :level %>:
-        <%= f.text_field :level, class: "form-control" %><br />
-
-        <%= f.label :location %>:
-        <%= f.text_field :location, class: "form-control" %><br />
-
-        <%= f.submit "Search", class: "btn btn-large btn-primary" %>
+            <%= f.label :location %>:
+            <%= f.text_field :location, class: "form-control" %><br />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <%= f.submit "Search", class: "btn btn-large btn-primary" %>
+        </div>
       <% end %>
     </div>
 
-    <hr />
+    <hr>
 
     <!-- Results section, should be a partial but hacking -->
 

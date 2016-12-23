@@ -3,7 +3,7 @@ class Job
   include ActiveModel::Validations
 
   attr_accessor :company
-  attr_accessor :category
-  attr_accessor :level
+  attr_accessor :categories
+  attr_accessor :levels
   attr_accessor :location
 end
