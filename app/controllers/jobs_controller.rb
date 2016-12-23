@@ -7,6 +7,26 @@ class JobsController < ApplicationController
   API_KEY = 'd46f707a798be0f5d9176416475e9a4700f0d515f26df799119bbee08b3041d6'
 
   def index
+  end
+
+  def search
+    @jobs_filter = Job.new
+    if !params['job'].nil?
+      @jobs_filter.company = params['job']['company']
+      @jobs_filter.categories = []
+      params['job']['categories'].each do |category|
+        @jobs_filter.categories << category unless category.blank?
+      end
+      @jobs_filter.levels = []
+      params['job']['levels'].each do |level|
+        @jobs_filter.levels << level unless level.blank?
+      end
+      @jobs_filter.locations = params['job']['locations']
+      # params['job']['locations'].each do |location|
+      #   @jobs_filter.locations << location unless location.blank?
+      # end
+    end
+
     @levels = [
       'Internship',
       'Entry Level',
@@ -35,13 +55,22 @@ class JobsController < ApplicationController
       'Social Media & Community'
     ]
 
-    # Set on first request, reset on clear
-    @has_filter = false unless @has_filter = true
+    # puts "#{MUSE_API_URL}?api_key=#{API_KEY}&page=0"
 
-    @jobs_filter = Job.new
-
-    puts "#{MUSE_API_URL}?api_key=#{API_KEY}&page=0"
-    uri = URI.parse("#{MUSE_API_URL}?api_key=#{API_KEY}&page=0")
+    if @jobs_filter.is_empty
+      uri = URI.parse("#{MUSE_API_URL}?api_key=#{API_KEY}&page=0")
+    else
+      unparsed_uri = "#{MUSE_API_URL}?api_key=#{API_KEY}&page=0"
+      unparsed_uri << "&company=#{@jobs_filter.company}" unless @jobs_filter.company.nil?
+      @jobs_filter.categories.each do |category|
+        unparsed_uri << "&category=#{category}" unless category.blank?
+      end
+      @jobs_filter.levels.each do |level|
+        unparsed_uri << "&level=#{level}" unless level.blank?
+      end
+      uri = URI.parse(unparsed_uri)
+      @has_filter = true
+    end
     response = Net::HTTP.get(uri)
     @jobs_data = JSON.parse(response)
 
@@ -49,10 +78,8 @@ class JobsController < ApplicationController
     @results = @jobs_data['results']
   end
 
-  def search
-  end
-
   def clear
+    redirect_to jobs_search_path
   end
 
 end

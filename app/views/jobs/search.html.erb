@@ -18,15 +18,16 @@
             <%= f.select :categories, options_for_select(@categories, @jobs_filter.categories), {}, {multiple: true, class: "form-control"} %><br />
           </div>
           <div class="col-md-4">
-            <%= f.label :level %>:
+            <%= f.label :levels %>:
             <%= f.select :levels, options_for_select(@levels, @jobs_filter.levels), {}, {multiple: true, class: "form-control"} %><br />
 
-            <%= f.label :location %>:
-            <%= f.text_field :location, class: "form-control" %><br />
+            <%= f.label :locations %>:
+            <%= f.text_field :locations, class: "form-control" %><br />
           </div>
         </div>
         <div class="col-md-4">
           <%= f.submit "Search", class: "btn btn-large btn-primary" %>
+          <%= button_to "Clear", jobs_clear_path, class: "btn btn-large btn-secondary" %>
         </div>
       <% end %>
     </div>
