@@ -1,0 +1,60 @@
+<!-- Monster HTML file containing the whole app. That's right everything. -->
+<html>
+  <body>
+    <% unless @jobs_data.nil? %>
+      <div>
+        <%= button_tag "Edit Job Filters", class: "btn btn-large btn-success" %>
+      </div>
+    <% end %>
+
+    <div id="search-form" class="col-md-4" >
+      <%= form_for @jobs_filter, :url => jobs_search_path(@jobs_filter), :method => :get do |f| %>
+        <%= f.label :company %>:
+        <%= f.text_field :company, class: "form-control" %><br />
+
+        <%= f.label :category %>:
+        <%= f.text_field :category, class: "form-control" %><br />
+
+        <%= f.label :level %>:
+        <%= f.text_field :level, class: "form-control" %><br />
+
+        <%= f.label :location %>:
+        <%= f.text_field :location, class: "form-control" %><br />
+
+        <%= f.submit "Search", class: "btn btn-large btn-primary" %>
+      <% end %>
+    </div>
+
+    <hr />
+
+    <!-- Results section, should be a partial but hacking -->
+
+    <div id="job-results" class="col-md-12" >
+      <% unless @results.nil? %>
+        <table class="table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Short Name</th>
+            <th>Category</th>
+            <th>Level</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @results.each do |job| %>
+            <tr>
+              <td><%= job['company']['name'] %></td>
+              <td><%= job['name'] %></td>
+              <td><%= get_comma_separated_list_of_names job['categories'] %></td>
+              <td><%= get_comma_separated_list_of_names job['levels'] %></td>
+              <td><%= get_comma_separated_list_of_names job['locations'] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+
+  </body>
+</html>
