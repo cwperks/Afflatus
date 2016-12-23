@@ -6,9 +6,6 @@ class JobsController < ApplicationController
   MUSE_API_URL = 'https://api-v2.themuse.com/jobs'
   API_KEY = 'd46f707a798be0f5d9176416475e9a4700f0d515f26df799119bbee08b3041d6'
 
-  def index
-  end
-
   def search
     @jobs_filter = Job.new
     if !params['job'].nil?
